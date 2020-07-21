@@ -29,8 +29,18 @@ def user_turn():
             val = input()
         else:
             entry_val = True
-    board[val] = "X"
+    official_board[val] = "X"
     return 
+
+def computer_turn():
+    opts = check_options(offical_board)
+    for y in range(9):
+        if offical_board[y].isalpha():
+            opts[y] = -1000
+    highest = max(opts)
+    loc = opts.index(highest)
+    offical_board[loc] = "O"
+    return
 
 def check_state(board):
     options = [board[0:3], board[3:6], board[6:9], [board[0], board[3], board[6]], [board[1], board[4], board[7]], [board[2], board[5], board[8]], [board[0], board[4], board[8]], [board[2], board[4], board[6]]]
@@ -48,6 +58,8 @@ def check_options(board):
     chances = [0, 0, 0, 0, 0, 0, 0, 0, 0]
     for y in range(9):
         board_copy = board
+        # if board_copy[y].isalpha():
+        #     chances[y] = -1000
         if board_copy[y].isdigit():
             board_copy[y] = "O"
             out = check_state(board_copy)
@@ -58,6 +70,14 @@ def check_options(board):
                     if board_copy[y].isdigit():
                         board_copy[y] = "X"
                         outx = check_state(board_copy)
-                        if outx
+                        if outx == "X win":
+                            chances[y] -= 50
+                        elif outx == "Tie":
+                            chances[y] += 1
+                        elif outx == "Y win":
+                            print("ERROR: THIS SHOULD NOT BE BEING CALLED FROM CHECK_OPTIONS")
+                        else:
+                            chances[y] += sum(check_options(board_copy))
+    return chances
 
 
