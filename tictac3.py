@@ -1,35 +1,65 @@
+from time import sleep
+
 # Tic Tac Tow Game 3x3
 
 offical_board = [1, 2, 3, 4, 5, 6, 7, 8, 9]
+game_status = "Unfinished"
 
 def start_game():
     #Function to run game
+    offical_board = [1, 2, 3, 4, 5, 6, 7, 8, 9]
+    game_status = "Unfinished"
     print("Hi! Welcome to DB Geiger's new tic tac toe game!")
     input("Press Enter to continue...")
+    while game_status == "Unfinished":
+        user_turn()
+        st = check_state(offical_board)
+        if st != "Unfinished":
+            game_status = st
+        sleep(1)
+        computer_turn()
+        st = check_state(offical_board)
+        if st != "Unfinished":
+            game_status = st
+        sleep(1)
+    if game_status == "X win":
+        print("Congradulations Human, You have bested me!")
+    elif game_status == "O win":
+        print("Hahahah human, I have bested you!")
+    elif game_status == "Tie":
+        print("Ahh! I guess we are evenly matched! Next time I will get you!")
+    play_again = input("Would you like to play again? (Y/N)")
+    answers = ["Y", "y", "N", "n"]
+    while play_again not in answers:
+        print("That wasn't a valid selection. Choose Y or N.")
+        play_again = input("Would you like to play again? (Y/N)")
+    if play_again == "Y" or play_again == "y":
+        start_game()
     return
 
 def print_board():
-    print board[0:3]
-    print board[3:6]
-    print board[6:9]
+    print official_board[0:3]
+    print official_board[3:6]
+    print official_board[6:9]
 
 
 def user_turn():
     print("It is your turn, human!")
     print("Enter a number 1-9 available on the board.")
-    print_board(board)
+    print_board()
     val = input()
     entry_val = False
     while entry_val == False:
         if len(val) > 1 or val.isdigit() == False:
             print("That was not a valid entry. Please enter a number 1-9 available on the board.")
             val = input()
-        elif board[val] == "X" or board[val] == "O":
+        elif official_board[val] == "X" or official_board[val] == "O":
             print("That square has already been taken. Please enter a number 1-9 STILL OPEN on the board.")
             val = input()
         else:
             entry_val = True
     official_board[val] = "X"
+    print_board()
     return 
 
 def computer_turn():
@@ -40,6 +70,8 @@ def computer_turn():
     highest = max(opts)
     loc = opts.index(highest)
     offical_board[loc] = "O"
+    print("Here is my response to your move!")
+    print_board()
     return
 
 def check_state(board):
@@ -58,8 +90,6 @@ def check_options(board):
     chances = [0, 0, 0, 0, 0, 0, 0, 0, 0]
     for y in range(9):
         board_copy = board
-        # if board_copy[y].isalpha():
-        #     chances[y] = -1000
         if board_copy[y].isdigit():
             board_copy[y] = "O"
             out = check_state(board_copy)
