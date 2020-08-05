@@ -16,6 +16,7 @@ def start_game():
         st = check_state(offical_board)
         if st != "Unfinished":
             game_status = st
+            break
         sleep(1)
         print("JUST BEFORE COMPUTER TURN", offical_board, game_status)
         computer_turn()
@@ -103,6 +104,7 @@ def check_state(board):
 def check_options(board):
     print("CHECK_OPTIONS 1", offical_board, game_status)
     board_copy = []
+    board_copy_copy = []
     chances = [0, 0, 0, 0, 0, 0, 0, 0, 0]
     for y in range(9):
         board_copy = list(board)
@@ -115,9 +117,10 @@ def check_options(board):
                 chances[y] += 50
             elif out == "Unfinished":
                 for z in range(9):
-                    if str(board_copy[z]).isdigit():
-                        board_copy[z] = "X"
-                        outx = check_state(board_copy)
+                    board_copy_copy = list(board_copy)
+                    if str(board_copy_copy[z]).isdigit():
+                        board_copy_copy[z] = "X"
+                        outx = check_state(board_copy_copy)
                         if outx == "X win":
                             print("X WIN!!!!!!!!!!")
                             chances[y] -= 50
@@ -127,10 +130,13 @@ def check_options(board):
                         elif outx == "O win":
                             print("ERROR: THIS SHOULD NOT BE BEING CALLED FROM CHECK_OPTIONS")
                         else:
-                            chances[y] += sum(check_options(board_copy))
+                            chances[y] += sum(check_options(board_copy_copy))
 
     print("CHECK_OPTIONS 3", chances)
     return chances
+[-6192, 0, -6398, -2448, -2150, -2150, -2150, -2300, -1900]
+[-7043, -8090, -5796, -6344, 0, -5248, -5097, -5198, -4045]
+
 
 # X O X
 # O O X
